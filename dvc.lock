@@ -1,0 +1,64 @@
+schema: '2.0'
+stages:
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: data/transactions.csv
+      hash: md5
+      md5: 758a5a69a84269ebae16b70aaa1058ea
+      size: 3442976
+    - path: src/features.py
+      hash: md5
+      md5: 6c428b44b310a370c73992f1e07ff087
+      size: 432
+    - path: src/train.py
+      hash: md5
+      md5: 6a7d2ad6a7c3fd4dd0d80894632cb97c
+      size: 1814
+    params:
+      params.yaml:
+        model:
+          n_estimators: 200
+          max_depth: 8
+        seed: 42
+        test_size: 0.25
+    outs:
+    - path: models/model.pkl
+      hash: md5
+      md5: 8ef1c50905efd245c8b9d91988f78a3f
+      size: 3662344
+    - path: models/run_info.json
+      hash: md5
+      md5: b6ef77ffffd1b19f55c0f4b62aef1307
+      size: 105
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+    - path: data/transactions.csv
+      hash: md5
+      md5: 758a5a69a84269ebae16b70aaa1058ea
+      size: 3442976
+    - path: models/model.pkl
+      hash: md5
+      md5: 8ef1c50905efd245c8b9d91988f78a3f
+      size: 3662344
+    - path: src/evaluate.py
+      hash: md5
+      md5: fe6a386f03a126c07d2a2cffffc55a99
+      size: 1237
+    - path: src/features.py
+      hash: md5
+      md5: 6c428b44b310a370c73992f1e07ff087
+      size: 432
+    params:
+      params.yaml:
+        gates:
+          min_recall: 0.7
+          min_precision: 0.4
+        seed: 42
+        test_size: 0.25
+    outs:
+    - path: metrics.json
+      hash: md5
+      md5: 38f96fadca473e01ca6134a2ee21072d
+      size: 131
